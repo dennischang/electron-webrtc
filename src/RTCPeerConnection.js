@@ -252,9 +252,11 @@ module.exports = function (daemon, wrtc) {
           var reqId = ${JSON.stringify(reqId)}
           var pc = conns[id]
           var onBeforeSetLocalDescription = function (res) {
-            setTimeout(function(){
-              onSuccess(pc.localDescription)
-            }, 1000);
+            pc.setLocalDescription(res, function() {
+              setTimeout(function(){
+                onSuccess(pc.localDescription)
+              }, 1000);
+            }, onFailure)
           }
           var onSuccess = function (res) {
             send(reqId, { res: res && res.toJSON ? res.toJSON() : res })

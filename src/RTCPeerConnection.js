@@ -166,7 +166,7 @@ module.exports = function (daemon, wrtc) {
     createAnswer (cb, errCb, options) {
       return this._callRemote(
         'createAnswer',
-        `onSuccess, onFailure, ${JSON.stringify(options)}`,
+        `onBeforeSetLocalDescription, onFailure, ${JSON.stringify(options)}`,
         cb, errCb
       )
     }

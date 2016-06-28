@@ -158,7 +158,7 @@ module.exports = function (daemon, wrtc) {
     createOffer (cb, errCb, options) {
       return this._callRemote(
         'createOffer',
-        `onSuccess, onFailure, ${JSON.stringify(options)}`,
+        `onBeforeSetLocalDescription, onFailure, ${JSON.stringify(options)}`,
         cb, errCb
       )
     }
@@ -251,6 +251,13 @@ module.exports = function (daemon, wrtc) {
           var id = ${JSON.stringify(this._id)}
           var reqId = ${JSON.stringify(reqId)}
           var pc = conns[id]
+          var onBeforeSetLocalDescription = function (res) {
+            pc.setLocalDescription(res, function() {
+              setTimeout(function(){
+                onSuccess(pc.localDescription)
+              }, 1000);
+            }, onFailure)
+          }
           var onSuccess = function (res) {
             send(reqId, { res: res && res.toJSON ? res.toJSON() : res })
           }
